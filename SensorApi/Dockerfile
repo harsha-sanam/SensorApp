@@ -1,5 +1,4 @@
-# Use ARM64-compatible .NET 8 SDK and ASP.NET runtime
-FROM --platform=linux/arm64 mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ["SensorApi.csproj", "./"]

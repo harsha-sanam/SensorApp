@@ -1,0 +1,26 @@
+<h2>Draw Sensor Values</h2>
+
+<label>Sensor:</label>
+<select [(ngModel)]="selectedSensorId">
+  <option *ngFor="let s of sensors" [value]="s.id">{{ s.name }}</option>
+</select>
+
+<label>Start Time:</label>
+<input type="datetime-local" [(ngModel)]="start" />
+
+<label>End Time:</label>
+<input type="datetime-local" [(ngModel)]="end" />
+
+<br /><br />
+<canvas
+  #drawCanvas
+  (mousedown)="startDraw($event)"
+  (mousemove)="draw($event)"
+  (mouseup)="endDraw()"
+  width="600"
+  height="300"
+  style="border: 1px solid black;"
+></canvas>
+
+<br />
+<button (click)="saveDrawing()">Save Drawing</button>

@@ -1,0 +1,20 @@
+<h2>Sensor Data Graph</h2>
+
+<label>Sensor:</label>
+<select [(ngModel)]="selectedSensor">
+  <option *ngFor="let s of sensors" [value]="s.name">{{ s.name }}</option>
+</select>
+
+<label>From:</label>
+<input type="date" [(ngModel)]="start" />
+
+<label>To:</label>
+<input type="date" [(ngModel)]="end" />
+
+<button (click)="loadData()">Load Data</button>
+
+<canvas baseChart
+  [datasets]="chartData"
+  [labels]="chartLabels"
+  chartType="line">
+</canvas>

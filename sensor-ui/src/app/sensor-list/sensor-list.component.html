@@ -1,0 +1,9 @@
+<h2>Sensors</h2>
+<input [(ngModel)]="newSensor" placeholder="Sensor name" />
+<button (click)="addSensor()">Add Sensor</button>
+
+<ul>
+  <li *ngFor="let sensor of sensors">
+    {{ sensor.name }}
+  </li>
+</ul>

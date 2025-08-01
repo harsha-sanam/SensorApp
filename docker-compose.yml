@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  sensor-db:
+    image: mysql:8.0
+    container_name: sensor-db
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rD
+      MYSQL_DATABASE: SensorDb
+      MYSQL_USER: sensoruser
+      MYSQL_PASSWORD: sensorpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sensor-net
+
+  sensor-api:
+    build:
+      context: ./SensorApi
+      dockerfile: Dockerfile
+    container_name: sensor-api
+    depends_on:
+      - sensor-db
+    platform: linux/arm64
+    environment:
+      - ConnectionStrings__DefaultConnection=server=sensor-db;port=3306;database=SensorDb;user=sensoruser;password=sensorpass;
+      - ASPNETCORE_URLS=http://+:5287
+    ports:
+      - "5287:5287"
+    networks:
+      - sensor-net
+
+  sensor-ui:
+    build:
+      context: ./sensor-ui
+      dockerfile: Dockerfile
+    container_name: sensor-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - sensor-api
+    networks:
+      - sensor-net
+
+volumes:
+  mysql_data:
+
+networks:
+  sensor-net:

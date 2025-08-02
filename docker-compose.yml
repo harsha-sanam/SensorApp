@@ -23,6 +23,7 @@ services:
     container_name: sensor-api
     depends_on:
       - sensor-db
+    platform: linux/amd64
     environment:
       - ConnectionStrings__DefaultConnection=server=sensor-db;port=3306;database=SensorDb;user=sensoruser;password=sensorpass;
       - ASPNETCORE_URLS=http://+:5287

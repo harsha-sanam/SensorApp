@@ -25,40 +25,67 @@ export class SensorDrawComponent implements AfterViewInit {
   ngOnInit() {
     this.http.get<any[]>(`${environment.apiUrl}/sensors`).subscribe(data => this.sensors = data);
   }
+  ngAfterViewInit(): void {
+  const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
-  ngAfterViewInit() {
-    const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
-    this.ctx = canvas.getContext('2d')!;
-  }
+  const getCoordinates = (e: MouseEvent | TouchEvent): { x: number; y: number } => {
+    const rect = canvas.getBoundingClientRect();
+    if (e instanceof TouchEvent && e.touches.length > 0) {
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    } else if (e instanceof MouseEvent) {
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+    return { x: 0, y: 0 };
+  };
 
-  startDraw(e: MouseEvent) {
-    this.drawing = true;
-    this.points = [];
-    this.ctx.beginPath();
-    this.ctx.moveTo(e.offsetX, e.offsetY);
-  }
+  const startDrawing = (e: MouseEvent | TouchEvent): void => {
+    this.isDrawing = true;
+    const { x, y } = getCoordinates(e);
+    this.path = [{ x, y }];
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
 
-  draw(e: MouseEvent) {
-    if (!this.drawing) return;
-    this.ctx.lineTo(e.offsetX, e.offsetY);
-    this.ctx.stroke();
-    this.points.push({ x: e.offsetX, y: e.offsetY });
-  }
+  const draw = (e: MouseEvent | TouchEvent): void => {
+    if (!this.isDrawing) return;
+    const { x, y } = getCoordinates(e);
+    this.path.push({ x, y });
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
 
-  endDraw() {
-    this.drawing = false;
-  }
+  const stopDrawing = (): void => {
+    this.isDrawing = false;
+  };
 
-  saveDrawing() {
-    const startTime = new Date(this.start).getTime();
-    const endTime = new Date(this.end).getTime();
-    const duration = endTime - startTime;
-    const values = this.points.map(p => ({
-      timestamp: new Date(startTime + (p.x / 600) * duration).toISOString(),
-      value: Number(100 - (p.y / 300) * 100),
-      sensorId: Number(this.selectedSensorId)
-    }));
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseleave', stopDrawing);
 
-    this.http.post(`${environment.apiUrl}/sensorvalues`, values).subscribe();
-  }
+  canvas.addEventListener('touchstart', (e: TouchEvent) => {
+    e.preventDefault();
+    startDrawing(e);
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e: TouchEvent) => {
+    e.preventDefault();
+    draw(e);
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (e: TouchEvent) => {
+    e.preventDefault();
+    stopDrawing();
+  });
+}
+
+
 }

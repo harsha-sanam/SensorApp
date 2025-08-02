@@ -19,5 +19,5 @@ rsync -avz \
 
 # Remove unused build cache (important!). docker builder prune -a -f
 
-gcloud compute ssh sensor-app-vm --zone=us-central1-c --command "docker rm -f $(docker ps -aq);docker rmi -f $(docker images -aq);docker builder prune -a -f;cd SensorApp; docker-compose down; docker-compose build --no-cache;docker-compose up -d;"
+gcloud compute ssh sensor-app-vm --zone=us-central1-c --command "git clone https://github.com/harsha-sanam/SensorApp.git; docker rm -f $(docker ps -aq);docker rmi -f $(docker images -aq);docker builder prune -a -f;cd SensorApp; docker-compose down; docker-compose build --no-cache;docker-compose up -d;"
 

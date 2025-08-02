@@ -1,9 +1,26 @@
-<h2>Sensors</h2>
-<input [(ngModel)]="newSensor" placeholder="Sensor name" />
-<button (click)="addSensor()">Add Sensor</button>
+<div class="container mt-4">
+  <h2>Sensor List</h2>
 
-<ul>
-  <li *ngFor="let sensor of sensors">
-    {{ sensor.name }}
-  </li>
-</ul>
+  <form (ngSubmit)="addSensor()" class="row g-3 mb-4">
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Sensor Name" [(ngModel)]="newSensor" name="name">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100">Add Sensor</button>
+    </div>
+  </form>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th> Sensor Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of sensors">
+        <td>{{ s }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

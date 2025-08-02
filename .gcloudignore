@@ -1,0 +1,7 @@
+# .gcloudignore
+node_modules/
+bin/
+obj/
+.git/
+dist/
+*.log

@@ -92,4 +92,26 @@ export class SensorDrawComponent implements AfterViewInit, OnInit {
       stopDrawing();
     });
   }
+  
+  saveDrawing(): void {
+  if (!this.path.length || !this.selectedSensorId || !this.start || !this.end) {
+    alert('Please draw and select sensor, start, and end time.');
+    return;
+  }
+
+  const startTime = new Date(this.start).getTime();
+  const endTime = new Date(this.end).getTime();
+  const duration = endTime - startTime;
+
+  const payload = this.path.map(p => ({
+    timestamp: new Date(startTime + (p.x / 400) * duration).toISOString(),
+    value: (300 - p.y) / 5, // example mapping y to value
+    sensorId: this.selectedSensorId
+  }));
+
+  this.http.post(`${environment.apiUrl}/sensorvalues`, payload).subscribe(() => {
+    alert('Saved!');
+  });
+}
+
 }

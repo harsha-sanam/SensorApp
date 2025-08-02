@@ -14,13 +14,9 @@
 <br /><br />
 <canvas
   #drawCanvas
-  (mousedown)="startDraw($event)"
-  (mousemove)="draw($event)"
-  (mouseup)="endDraw()"
-  width="600"
+  width="400"
   height="300"
-  style="border: 1px solid black;"
-></canvas>
-
-<br />
+  style="border: 1px solid black;">
+</canvas>
+<br>
 <button (click)="saveDrawing()">Save Drawing</button>

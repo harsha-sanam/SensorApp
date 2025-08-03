@@ -30,7 +30,7 @@ export class ChatPopupComponent {
     this.question = '';
     this.messages.push({ question: userMessage, answer: '...' });
 
-    this.http.post<{ answer: string }>(`${window.location.origin.replace(/:\d+$/, ':1234')}/chat`, { question: userMessage })
+    this.http.post<{ answer: string }>(`${window.location.origin}:1234/chat`, { question: userMessage })
       .subscribe({
         next: (res) => {
           const last = this.messages[this.messages.length - 1];

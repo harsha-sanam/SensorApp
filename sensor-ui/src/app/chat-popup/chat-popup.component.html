@@ -1,0 +1,19 @@
+<!-- Chat Toggle Button -->
+<button class="chat-toggle" (click)="toggleChat()">
+  💬
+</button>
+
+<!-- Chat Window -->
+<div class="chat-popup" *ngIf="isOpen">
+  <div class="chat-header" (click)="toggleChat()">AI Assistant ✨</div>
+  <div class="chat-body">
+    <div *ngFor="let msg of messages">
+      <div class="user-msg"><strong>You:</strong> {{ msg.question }}</div>
+      <div class="ai-msg"><strong>AI:</strong> {{ msg.answer }}</div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <input [(ngModel)]="question" placeholder="Ask me something..." />
+    <button (click)="send()">Send</button>
+  </div>
+</div>

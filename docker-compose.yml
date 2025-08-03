@@ -25,7 +25,7 @@ services:
       - sensor-db
     platform: linux/amd64
     environment:
-      - ConnectionStrings__DefaultConnection=server=sensor-db;port=3306;database=SensorDb;user=sensoruser;password=sensorpass;
+      - ConnectionStrings__DefaultConnection=${SENSOR_DB_CONSTR}
       - ASPNETCORE_URLS=http://+:5287
     ports:
       - "5287:5287"
@@ -43,6 +43,16 @@ services:
       - sensor-api
     networks:
       - sensor-net
+  
+  ai-agent:
+    build:
+      context: ./ai-agent
+    container_name: ai-agent
+    ports:
+      - "1234:1234"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
 
 volumes:
   mysql_data:

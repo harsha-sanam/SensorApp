@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; 
 
 @Component({
   standalone: true,
   selector: 'app-chat-popup',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './chat-popup.component.html',
   styleUrls: ['./chat-popup.component.css']
 })
